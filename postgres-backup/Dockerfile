@@ -16,16 +16,16 @@ ARG container_user_uid=1001
 ARG container_user_gid=1001
 
 
-RUN apt-get update && apt-get install -y \
-    curl \
-    unzip \
-    postgresql-15 \
-    && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update \
+    && apt-get install -y wget ca-certificates gnupg python3 python3-pip curl \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
+    && sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
+    && apt-get update \
+    && apt-get install -y postgresql-client-15 \
+    && pip3 install awscli \
     && groupadd -g ${container_user_gid} ${container_user_group} \
-    && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user}
-
-
-
+    && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user} \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory for the user
 WORKDIR /home/${container_user}
