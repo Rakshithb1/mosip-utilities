@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM ubuntu:latest
 
 ARG SOURCE
 ARG COMMIT_HASH
@@ -14,6 +14,13 @@ ARG container_user=mosip
 ARG container_user_group=mosip
 ARG container_user_uid=1001
 ARG container_user_gid=1001
+
+
+RUN apt-get update && \
+&& apt-get install -y postgresql-client-15 awscli curl \
+&& groupadd -g ${container_user_gid} ${container_user_group} \
+&& useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user} \
+&& rm -rf /var/lib/apt/lists/*
 
 # Install dependencies in a single RUN command to reduce layers
 RUN apk update && apk add --no-cache bash postgresql-client-15 curl aws-cli \
