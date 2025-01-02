@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM ubuntu
 
 ARG SOURCE
 ARG COMMIT_HASH
