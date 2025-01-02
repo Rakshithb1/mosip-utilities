@@ -17,7 +17,7 @@ ARG container_user_gid=1001
 
 
 RUN apt-get update \
-&& apt-get install -y postgresql-client \
+&& apt-get install -y postgresql-client-15 \
 && python3-pip \
 && pip3 install --upgrade pip awscli \
 && groupadd -g ${container_user_gid} ${container_user_group} \
