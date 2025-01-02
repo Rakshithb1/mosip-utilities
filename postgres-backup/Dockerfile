@@ -19,7 +19,7 @@ ARG container_user_gid=1001
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
-    postgresql-client-15 \
+    postgresql-15 \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd -g ${container_user_gid} ${container_user_group} \
     && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user}
