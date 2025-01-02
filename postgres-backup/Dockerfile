@@ -16,7 +16,9 @@ ARG container_user_uid=1001
 ARG container_user_gid=1001
 
 # Install dependencies in a single RUN command to reduce layers
-RUN apk update && apk add --no-cache bash postgresql-client-15 curl aws-cli
+RUN apk update && apk add --no-cache bash postgresql-client-15 curl aws-cli \
+&& addgroup -g ${container_user_gid} ${container_user_group} \
+&& adduser -s /bin/sh -u ${container_user_uid} -G ${container_user_group} -h /home/${container_user} --disabled-password ${container_user}
 
 # Set working directory for the user
 WORKDIR /home/${container_user}
