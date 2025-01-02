@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:bullseye-slim
 
 ARG SOURCE
 ARG COMMIT_HASH
@@ -16,16 +16,11 @@ ARG container_user_uid=1001
 ARG container_user_gid=1001
 
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends wget gnupg curl unzip \
-    && wget -qO /usr/share/keyrings/pgdg-archive-keyring.gpg https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    && echo "deb [signed-by=/usr/share/keyrings/pgdg-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends postgresql-client-15 \
-    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip \
-    && ./aws/install \
-    && rm -rf /var/lib/apt/lists/* awscliv2.zip aws \
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    postgresql-client-15 \
+    && rm -rf /var/lib/apt/lists/* \
     && groupadd -g ${container_user_gid} ${container_user_group} \
     && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user}
 
