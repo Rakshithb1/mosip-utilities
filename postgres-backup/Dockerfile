@@ -21,7 +21,7 @@ RUN apt-get update \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
     && apt-get update \
-    && apt-get install -y postgresql-client-15 \
+    && apt-get install -y postgresql-15 \
     && pip3 install awscli \
     && groupadd -g ${container_user_gid} ${container_user_group} \
     && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user} \
