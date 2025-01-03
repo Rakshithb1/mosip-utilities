@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM postgres:15
 
 ARG SOURCE
 ARG COMMIT_HASH
@@ -16,16 +16,15 @@ ARG container_user_uid=1001
 ARG container_user_gid=1001
 
 
-RUN apt-get update \
-    && apt-get install -y wget ca-certificates gnupg python3 python3-pip curl \
-    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
-    && apt-get update \
-    && apt-get install -y postgresql-15 \
-    && pip3 install awscli \
-    && groupadd -g ${container_user_gid} ${container_user_group} \
-    && useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${container_user} \
-    && rm -rf /var/lib/apt/lists/*
+# Install AWS CLI
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && rm -rf awscliv2.zip aws \
+    && apt-get clean
 
 # Set working directory for the user
 WORKDIR /home/${container_user}
